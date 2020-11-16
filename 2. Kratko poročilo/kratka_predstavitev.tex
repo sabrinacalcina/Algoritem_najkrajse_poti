@@ -1,0 +1,122 @@
+\documentclass[a4paper, 12 pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[slovene]{babel}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{units}
+\usepackage{eurosym}
+\usepackage{pdfpages}
+\usepackage{comment}
+\usepackage{enumerate}
+\usepackage{mathtools}
+\usepackage{amsthm}
+
+\theoremstyle{plain}
+\newtheorem{izrek}{Izrek}
+\theoremstyle{definition}
+\newtheorem{definicija}{Definicija}
+\theoremstyle{remark}
+\newtheorem{opomba}{Opomba}
+
+\begin{document}
+\begin{titlepage}
+		\begin{center}
+		
+		\large
+		Univerza v Ljubljani\\
+		\normalsize
+		Fakulteta za matematiko in fiziko\\
+		
+		\small
+		Finančna matematika - 1. stopnja\\
+		
+		\vspace{5 cm} 
+		
+		\large
+		Sabrina Calcina in Jan Črne \\
+		
+		\vspace{0.5cm}
+		\Large
+		\textbf{Algoritmi in množice neodvisnosti za podatkovno vodene robustne probleme najkrajših poti  (kratko poročilo)}
+		
+		\vspace{0.5 cm}
+		\normalsize
+		Finančni praktikum
+		
+		\vspace{1.5cm}
+		\normalsize
+		Mentorja: prof. dr. Sergio Cabello in asist. dr. Janoš Vidali
+		
+		\vfill
+		
+		\large Ljubljana, november 2020
+		
+		\end{center}
+\end{titlepage}
+
+\section{Povzetek}
+
+Ukvarjali se bomo, z  robustnimi problemi najkrajših poti. To so zanesljivi problemi, katerih cilj je najti pot, ki optimizira najslabše delovanje v množici negotovosti. Množica vsebuje vse ustrezne scenarije stroškov.
+Predpostavka tega problema je, da so množice negotovosti podane s strani strokovnjakov, ki povedo obliko in velikost le te.
+Skonstuirali bomo vrsto množic negotovosti iz že znane literature in sicer iz The city of Chicago. Meritev v literaturi temelji na resničnih podatkih iz meritev prometa. V najinem delu bova podatke zgenerirala. Nato sklepamo o primernosti množic negotovosti, tako da primerjamo uspešnost dobljenih robustnih poti znotraj in zunaj vzorca. 
+Na podlagi eksperimentov se nato osredotočimo na elipsoidne množice negotovosti in razvijemo nov algoritem.
+
+\section{Uvod}
+Za klasične probleme najkrajših poti v uličnih omrežjih so bile dosežene znatne pospešitve v primerjavi s standardnim Dijkstrovim algoritmom. Zahvala gre tehnikam inženirskega algoritma, ki omogočajo uporabo informacij v realnem času, tudi v velikih omrežjih.
+Vendar je večina robustnih problemov z najkrajšimi potmi časovno zahtevna in optimizacija v realnem času ni na voljo. Za oblikovanje robustnega problema je tako treba imeti opis vseh možnih in ustreznih scenarijev, na katere naj bi se pripravili.\newline
+
+Trenutna literatura o najkrajših poteh običajno predvideva, da je množica podana z neko mešanico predhodne obdelave podatkov in strokovnega znanja, ki ni del študije. To pomeni, da so bile preučevane različne vrste množic, vendar brez odgovora na to katera je prava izbira.\newline
+
+Prvi članek, ki sledi drugačni perspektivi problema najkrajše poti, je izšel leta 2017. Gre za robustno optimizacijo, ki temelji na podatkih, kjer je gradnja negotove množice na podlagi surovih opazovanj del robustnega problema optimizacije. Na podlagi realnih opazovanj mesta Chicago izdelamo vrsto množic, izračunamo ustrezne robustne rešitve in izvedemo poglobljeno analizo njihove uspešnosti. To nam omogoča, da ugotovimo, katere množice so primerne za aplikacijo in katere ne.\newline
+
+Kasneje se osredotočimo na primer elipsoidne negotovosti in zagotavljanje hitrejšega algoritma. 
+
+\section{Ogledali si bomo:}
+\begin{itemize}
+\item{nove množice eksperimentalnih rezultatov, ki temelji na dobi opazovanja 46 dni, kar vodi do vpogleda v delovanje različnih množic negotovosti, ter}
+\item{novo analizo algoritma za množice negotovosti, ki so osem paralelne in elipsoidne. Algoritem je sposoben robustne najkrajše poti, aplicirati v realni čas navigacijskih sistemov.}
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
