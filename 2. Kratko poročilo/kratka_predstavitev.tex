@@ -28,7 +28,7 @@
 		\large
 		Univerza v Ljubljani\\
 		\normalsize
-		Fakulteta za matematiko in fiziko000\\
+		Fakulteta za matematiko in fiziko\\
 		
 		\small
 		Finančna matematika - 1. stopnja\\
@@ -59,25 +59,28 @@
 
 \section{Povzetek}
 
-Ukvarjali se bomo, z  robustnimi problemi najkrajših poti. To so zanesljivi problemi, katerih cilj je najti pot, ki optimizira najslabše delovanje v množici negotovosti. Množica vsebuje vse ustrezne scenarije stroškov.
+Ukvarjali se bomo, z  robustnimi problemi najkrajših poti. To so problemi, katerih cilj je najti pot, ki optimizira najslabše delovanje v neki množici negotovosti. Množica negotovosti je množica, ki vsebuje vse scenarije cen povezav, zgeneriranih ali zabeleženih na podlagi opažanj.
 Predpostavka tega problema je, da so množice negotovosti podane s strani strokovnjakov, ki povedo obliko in velikost le te.
-Skonstuirali bomo vrsto množic negotovosti iz že znane literature in sicer iz The city of Chicago. Meritev v literaturi temelji na resničnih podatkih iz meritev prometa. V najinem delu bova podatke zgenerirala. Nato sklepamo o primernosti množic negotovosti, tako da primerjamo uspešnost dobljenih robustnih poti znotraj in zunaj vzorca. 
-Na podlagi eksperimentov se nato osredotočimo na elipsoidne množice negotovosti in razvijemo nov algoritem.
+Množice negotovosti katere bova pregledala bodo enake tistim iz članka z naslovom Algorithms and uncertainty sets for data-driven robust shortest paths problem iz leta 2017. Meriteve v uporabljene v članku temeljijo na resničnih podatkih iz meritev prometa, v najinem delu bova podatke najverjetneje zgenerirala sama, ob nekaj vnaprej dolečinh predpostavkah. Na podlagi teh podatkov, ki torej vsebujejo cene povezav nekega usmerjenega grafa nato, po premisleku izberemo primerno množico negotovosti, tako da primerjamo uspešnost dobljenih robustnih poti znotraj in zunaj vzorca, znotraj vzorca so v članku uporabili 75 \% vseh nabranih podatkov. 
+Na podlagi eksperimentov se nato osredotočimo na elipsoidne množice negotovosti in razvijemo nov algoritem s katerim nato iščemo najcenejšo povezavo med začetnim in končnim vozliščem.
 
 \section{Uvod}
-Za klasične probleme najkrajših poti v uličnih omrežjih so bile dosežene znatne pospešitve v primerjavi s standardnim Dijkstrovim algoritmom. Zahvala gre tehnikam inženirskega algoritma, ki omogočajo uporabo informacij v realnem času, tudi v velikih omrežjih.
-Vendar je večina robustnih problemov z najkrajšimi potmi časovno zahtevna in optimizacija v realnem času ni na voljo. Za oblikovanje robustnega problema je tako treba imeti opis vseh možnih in ustreznih scenarijev, na katere naj bi se pripravili.\newline
+Za klasične probleme najkrajših poti v uličnih omrežjih so bile dosežene znatne pospešitve v primerjavi s standardnim Dijkstrovim algoritmom. Zahvala gre tehnikam novejših algoritmov, ki omogočajo uporabo informacij v realnem času, tudi v velikih omrežjih.
+Kljub temu je večina robustnih problemov z najkrajšimi oz. najcenejšimi potmi časovno zahtevna in optimizacija v realnem času ni na voljo. Za oblikovanje robustnega problema je tako treba imeti opis vseh možnih in ustreznih scenarijev, na katere naj bi se pripravili.\newline
 
-Trenutna literatura o najkrajših poteh običajno predvideva, da je množica podana z neko mešanico predhodne obdelave podatkov in strokovnega znanja, ki ni del študije. To pomeni, da so bile preučevane različne vrste množic, vendar brez odgovora na to katera je prava izbira.\newline
+Literatura običajno predvideva, da je množica podana z neko mešanico predhodne obdelave podatkov in strokovnega znanja, ki ni del študije. To pomeni, da so bile preučevane različne vrste množic, vendar brez odgovora na to katera je prava izbira.\newline
 
 Prvi članek, ki sledi drugačni perspektivi problema najkrajše poti, je izšel leta 2017. Gre za robustno optimizacijo, ki temelji na podatkih, kjer je gradnja negotove množice na podlagi surovih opazovanj del robustnega problema optimizacije. Na podlagi realnih opazovanj mesta Chicago izdelamo vrsto množic, izračunamo ustrezne robustne rešitve in izvedemo poglobljeno analizo njihove uspešnosti. To nam omogoča, da ugotovimo, katere množice so primerne za aplikacijo in katere ne.\newline
 
 Kasneje se osredotočimo na primer elipsoidne negotovosti in zagotavljanje hitrejšega algoritma. 
 
-\section{Ogledali si bomo:}
+\section{Opis problema in načrt za spopadanje z njim:}
 \begin{itemize}
-\item{nove množice eksperimentalnih rezultatov, ki temelji na dobi opazovanja 46 dni, kar vodi do vpogleda v delovanje različnih množic negotovosti, ter}
-\item{novo analizo algoritma za množice negotovosti, ki so osem paralelne in elipsoidne. Algoritem je sposoben robustne najkrajše poti, aplicirati v realni čas navigacijskih sistemov.}
+\item{Imamo nek usmerjen graf G = (V, A), v je množica vozljev, A množica povezav, za vsako povezavo poznamo njeno ceno, ki bo v naših primerih čas, potreben za prehod te povezave,}
+\item{cilj je najti pot v grafu, ki zminimizira čas potreben za pot od začetnega do končnega oglišča, vendar za razliko od nam do zdaj znanih primerov, kjer so cene povezav podane eksaktno, so v našem primeru le te podane z množico opažanj teh povezav, to bodo najini surovi podatki}
+\item{na glede na surove podatke lahko sedaj definiramo različne množice negotovosti (množica konvekse ovojnice, intervalska množica, elipsoidne množice negotovosti, ...)}
+\item{na teh množicah lahko rešujemo drugačen problem, sedaj želimo poiskati takšno pot, da bomo zminimizirali časovno najugodnejšo pot v primeru da imamo najslabši možen scenarji. npr. želimo poiskati najkrajšo pot v mestu od ene točke do druge v primeru, kadar so ceste maksimalno zasedene, torej ko za vožnjo po njih porebujemo največ časa}
+\item{za najim primer se bova osredotočila na izvajanje algoritma za iskanje teh poti na elipsoidinih množicah negotovosti, saj le te, kot je v članku omenjeno ponudijo najbolše razmerje med maksimalno in povprečno potjo, ter ponudijo zadovoljivo časovno zahtevnost algoritma.}
 \end{itemize}
 
 
