@@ -123,7 +123,7 @@ def graf(st_opazanj, st_vozlisc, st_pov_grafa, min_cena, max_cena):
 
 
 def vektorcki_x(graf, zacetno, koncno):
-    vse_poti = graf.all_paths(zacetno, koncno, use_multiedges=True, report_edges=False, labels=False)
+    vse_poti = graf.all_paths(zacetno, koncno) #, use_multiedges=True, report_edges=False, labels=False)
     vse_povezave = graf.edges()
     par = []
     for i in range(0,len(vse_povezave)):
