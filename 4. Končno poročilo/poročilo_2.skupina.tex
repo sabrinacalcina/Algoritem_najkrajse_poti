@@ -1,0 +1,236 @@
+\documentclass[a4paper, 12 pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[slovene]{babel}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{units}
+\usepackage{eurosym}
+\usepackage{pdfpages}
+\usepackage{comment}
+\usepackage{enumerate}
+\usepackage{mathtools}
+\usepackage{amsthm}
+
+
+
+% ukazi za matematicna okolja
+\theoremstyle{definition} % tekst napisan pokoncno
+\newtheorem{definicija}{Definicija}[section]
+\newtheorem{primer}[definicija]{Primer}
+\newtheorem{opomba}[definicija]{Opomba}
+
+\renewcommand\endprimer{\hfill$\diamondsuit$}
+
+
+\theoremstyle{plain} % tekst napisan posevno
+\newtheorem{lema}[definicija]{Lema}
+\newtheorem{izrek}[definicija]{Izrek}
+\newtheorem{trditev}[definicija]{Trditev}
+\newtheorem{posledica}[definicija]{Posledica}
+\theoremstyle{definition}
+\newtheorem{definition}{Definicija}[section]
+
+
+
+
+% za stevilske mnozice uporabi naslednje simbole
+\newcommand{\R}{\mathbb R}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\C}{\mathbb C}
+\newcommand{\Q}{\mathbb Q}
+
+% ukaz za slovarsko geslo
+\newlength{\odstavek}
+\setlength{\odstavek}{\parindent}
+\newcommand{\geslo}[2]{\noindent\textbf{#1}\hspace*{3mm}\hangindent=\parindent\hangafter=1 #2}
+
+% naslednje ukaze ustrezno popravi
+\newcommand{\program}{Finančna matematika} % ime studijskega programa: Matematika/Finan"cna matematika
+\newcommand{\imeavtorja}{Sabrina Calcina in Jan Črne} % ime avtorja
+\newcommand{\imementorja}{prof. dr. Sergio Cabello in asist. dr. Janoš Vidali} % akademski naziv in ime mentorja
+\newcommand{\naslovdela}{Algoritmi in množice neodvisnosti za podatkovno vodene robustne probleme najkrajših poti}
+\newcommand{\letnica}{2020} %letnica diplome
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+
+
+
+
+
+
+\begin{document}
+
+\thispagestyle{empty}
+\noindent{\large
+UNIVERZA V LJUBLJANI\\[1mm]
+FAKULTETA ZA MATEMATIKO IN FIZIKO\\[5mm]
+\program\ -- 1.~stopnja}
+\vfill
+
+\begin{center}{\large
+\imeavtorja\\[2mm]
+{\bf \naslovdela}\\[10mm]
+Finančni praktikum\\[1cm]
+Mentor: \imementorja}
+\end{center}
+\vfill
+
+\noindent{\large
+Ljubljana, \letnica}
+\pagebreak
+
+\thispagestyle{empty}
+\tableofcontents
+\pagebreak
+
+
+\thispagestyle{empty}
+\begin{center}
+{\bf \naslovdela}\\[3mm]
+{\sc Povzetek}
+\end{center}
+V prejktu smo se ukvarjali z  robustnimi problemi najkrajših poti. To so problemi, katerih cilj je najti pot, ki optimizira najslabše delovanje v množici negotovosti. Množica negotovosti je množica, ki vsebuje vse scenarije cen povezav, zgeneriranih ali zabeleženih na podlagi opažanj.
+Predpostavka tega problema je, da so množice negotovosti podane s strani strokovnjakov, ki povedo obliko in velikost le te.
+Množice negotovosti sva v projektu naključno generirala. Meriteve uporabljene v članku temeljijo na resničnih podatkih iz meritev prometa. Na podlagi teh podatkov, ki torej vsebujejo cene povezav nekega usmerjenega grafa, nato po premisleku izberemo primerno množico negotovosti, tako da primerjamo uspešnost dobljenih robustnih poti. 
+Na podlagi že znanih eksperimentov o učinkovitosti elipsoidne negotovosti, se nato osredotočimo na elipsoidne množice negotovosti in razvijemo nov algoritem s katerim nato iščemo najcenejšo povezavo med začetnim in končnim vozliščem.
+\vfill
+
+
+\pagebreak
+
+\section{Uvod}
+Za klasične probleme najkrajših poti v uličnih omrežjih so bile dosežene znatne pospešitve v primerjavi s standardnim Dijkstrovim algoritmom. Zahvala gre tehnikam novejših algoritmov, ki omogočajo uporabo informacij v realnem času, tudi v velikih omrežjih.
+Kljub temu je večina robustnih problemov z najkrajšimi oz. najcenejšimi potmi časovno zahtevna in optimizacija v realnem času ni na voljo. Za oblikovanje robustnega problema je tako treba imeti opis vseh možnih in ustreznih scenarijev, na katere naj bi se pripravili.\newline
+
+Prvi članek, ki sledi drugačni perspektivi problema najkrajše poti, je izšel leta 2017. Gre za robustno optimizacijo, ki temelji na podatkih, kjer je gradnja negotove množice na podlagi surovih opazovanj del robustnega problema optimizacije. Na podlagi realnih opazovanj mesta Chicago so tako izračunali ustrezne robustne rešitve in izvedli poglobljeno analizo njihove uspešnosti. \newline
+
+V delu se osredotočimo na primer elipsoidne negotovosti in zagotavljanje hitrejšega algoritma. 
+
+
+\section{Opis problema}
+\begin{itemize}
+\item{Za začetek imamo usmerjen graf $ G = (V, A)$, kjer je $v$ je množica vozljev, ter $A$ množica povezav. Za vsako povezavo je znana njena ceno, ki bo v našem primeru čas, potreben za prehod te povezave.}
+\item{Cilj je najti pot v grafu, ki minimizira čas potreben za pot od začetnega do končnega oglišča. Za razliko od nam do zdaj znanih primerov, kjer so bile cene povezav podane eksaktno, so v našem primeru te podane z množico opazovanj teh povezav.}
+\item{Na teh množicah lahko sedaj poiščemo takšno pot, da bomo zminimizirali časovno najugodnejšo pot v primeru najslabšega scenarija. Npr. želimo poiskati najkrajšo pot v mestu od ene točke do druge, v primeru, maksimalne zasedenosti cest. Torej takrat,ko za vožnjo po njih porebujemo največ časa.}
+\item{Osredotočili se bomo na izvajanje algoritma za iskanje teh poti na elipsoidinih množicah negotovosti. Le te ponudijo najbolše razmerje med maksimalno in povprečno potjo, ter ponudijo zadovoljivo časovno zahtevnost algoritma.}
+\item{Prvotno sva tako izvedla Naivni algoritem, kasneje pa še Izboljšan algoritem.}
+\end{itemize}
+
+
+\section{Množice negotovosti najkrajših poti}
+
+Naj bo $G = (V, A)$ graf, kjer z $V$ označimo vozlišča grafa in z $A$ poti. Za vsako pot $e\in A$ poznamo čas potovanja $c_{e} \ge 0$. Začetno oglišče označimo s $s$, končno pa s $t$.
+Cilj je najti najkrajšo pot, ki minimizira celoten čas potovanja, podan kot vsoto vseh časov na določeni povezavi, ki je del poti. Formalno to zapišemo kot
+
+\begin{equation*}
+\min \{c^t x : x \in \chi \},
+\end{equation*}
+
+kjer je $\chi \subseteq \{0,1\}^n$ in $n = |A|$.
+
+Predpostavimo tudi, da čas potovanja ni natančno znan, vendar je le ta podan kot množica $R$, kjer je $R = \{c^1, \dots, c^N \}$.
+
+Na podlagi teh podatkov generiramo množice negotovosti $U$, ki jih uporabljamo pri robustnih problemih najkrajših poti
+
+\begin{equation*}
+\min \{\max \limits_{c \in U} c^t x : x \in \chi \}.
+\end{equation*}
+ Torej iščemo pot, ki minimizira najslabše možnosti cen, glede na vse cene v $U$.
+
+\bigskip
+
+Naj bo sedaj $\hat{c} = \frac{1}{N} * \sum_{i \in [N]} c^i $, kjer je $[N] = \{1, \dots , N \}$. Elipsoidno negotovost definiramo kot
+\begin{equation*}
+U^E = \{c: (c - \hat{c})^t \Sigma ^{-1} (c - \hat{c}	\le \lambda \},
+\end{equation*}
+
+kjer je $\Sigma = \frac{1}{N} \sum_{i \in [N]} (c^i -\hat{c}) (c^i -\hat{c})^t$.
+
+\bigskip
+Poleg elipsoidne negotovosti, poznamo tudi negotovost konveksnega trupa, intervalsko negotovost ter negotovost permotohula. 
+\pagebreak
+\section{Elipsoidne množice negotovosti}
+Ker so elipsoidne množice negotovosti zelo stabilne in splošno zelo učinokovite, glede na ostale navedene negotovosti, smo se osredotočili na le te.
+
+Sprva opišimo učinkovit algoritem za reševanje problema robustne najkrajše poti, če je množica negotovosti podana kot osen paralelni elipsoid. Formulacija tega problema je
+
+\begin{equation*}
+\begin{aligned}
+\min \quad &  \hat{c}^t x + z\\
+\textrm{p.p.} \quad & {z}^2 \geq (x^t \Sigma x )\\
+& x \in \chi,\\
+\end{aligned}
+\end{equation*}
+ kjer $\Sigma$ predstavlja diagonalo matrike, ki specificira obliko in velikost elipsoida. \newline
+
+Naj bo $d$ diagonala matrike $\Sigma$.
+Ker velja, da je $x$ binaren vektor in s tem $x_{i}^2=x_{i}$, poleg tega pa velja, da je $(x^t  \Sigma x)^2 = d^tx$, lahko problem zreduciramo na
+
+\begin{equation*}
+\begin{aligned}
+\min \quad &  \hat{c}^t x +\sqrt{d^tx}\\
+\textrm{p.p.} \quad & x \in \chi.\\
+\end{aligned}
+\end{equation*}
+
+Problem lahko transformiramo na bikriterijski optimizacijski problem, podan kot
+
+\begin{equation*}
+\begin{aligned}
+\min \quad &  \begin{pmatrix} \hat{c}^t x \\ d^tx \end{pmatrix} \\
+\textrm{p.p.} \quad & x \in \chi.\\
+\end{aligned}
+\end{equation*}
+
+Rešitev robustnega problema je v resnici tudi rešitev bikriterijskega optimizacijskega problema. Rešitev zgornjega problema pa označimo z $x^*$, če obstajata  $\alpha_{0}$ in $\alpha_{1}$, da je $0 \le \alpha_{0} < \alpha_{1} \le 1$. Tako za vse $\alpha \in [\alpha_{0},\alpha_{1}]$ je rešitev problema $x'$, za katero velja $(\alpha c + (1 - \alpha)d)^tx' < (\alpha c + (1- \alpha)d)^tx^{*}$.\newline
+ To pomeni, da je dovolj, če rešimo naslednji problem
+\begin{equation*}
+\begin{aligned}
+\min \quad &  \alpha c + (1 - \alpha)d)^tx \\
+\textrm{p.p.} \quad & x \in \chi.\\
+\end{aligned}
+\end{equation*}
+
+Ker je rešitev lahko precej zahtevna, se omejimo na računanje podmnožic vseh učinkovitih ekstremnih rešitev problema. Med najdenimi rešitvami se nato izbere najboljša glede na robustno ciljno funkcijo.
+
+
+
+
+\section{Priprava}
+Opiši Jan
+
+\section{Naivni algorotem in njegovi rezultati}
+
+\section{Izboljšani algoritem in njegovi rezultati}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
