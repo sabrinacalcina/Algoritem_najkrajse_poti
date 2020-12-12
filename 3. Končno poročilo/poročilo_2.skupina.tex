@@ -198,10 +198,27 @@ Rešitev robustnega problema je v resnici tudi rešitev bikriterijskega optimiza
 Ker je rešitev lahko precej zahtevna, se omejimo na računanje podmnožic vseh učinkovitih ekstremnih rešitev problema. Med najdenimi rešitvami se nato izbere najboljša glede na robustno ciljno funkcijo.
 
 
+Oba algoritma iščeta učinkovite oz. učinkovito ekstremno rešitev s pomočjo računanja optimizacije leksikografskega problema:
+\begin{equation*}
+\begin{aligned}
+\text{arglexmin}\quad &  (\hat{c}^t x , {d^tx}) in text{arglexmin}\\
+\textrm{p.p.} \quad & x \in \chi.\\
+\end{aligned}
+\end{equation*}
+ 
+
+
 
 
 \section{Priprava}
-Opiši Jan
+
+Najprej sva generirala množice negotovosti velikosti $50$, torej za vsako povezavo v grafu je bilo danih $50$ različnih cen oziroma opažanj. Vsaki povezavi sva nato naračunala povprečno ceno, povprečja vseh teh povezav so zbrana v vektorju $\hat{c}$.\newline
+  
+V najini nalogi sva obravnavala dva algoritma , ki iščeta najcenejšo robustno rešitev. Algoritma sva prizkušala na usmerjenih mrežasti grafih, v najinem primeru na grafih  z od $3\times3$, do $9\times9$ vozlišcih. Za vsakega od teh grafov sva iskala pot od začetnega vozlišča $(1, 1)$ do skrajno robnega vozlišča s koordinatami $(V, V)$. Za potrebo algoritmov, sva morala najti vse možne poti med tema dvema vozliščema, če je poti med vozliščema $p$, sva potem priredila vektorje iz množice $X = \{x^1, \dots, x^p \}$, vektorji so sestavljeni iz elementov $1$, v kolikor je povezava v poti uporabljena in $0$, če je izpuščena.\newline
+
+Pred pričetkom uporabe algoritmov sva pridobila še diagonalce matrike $\Sigma$, ki je naračunana iz najinih množic negotovosti.
+
+
 
 \section{Naivni algorotem in njegovi rezultati}
 
