@@ -1,0 +1,7 @@
+data = c(3,4,5,6,7,8,9)
+stetja = c(12/5, 16/5, 23/5, 29/5, 34/5, 39/5, 41/5)
+stetja_improved = c(7/5, 9/5, 2, 2, 14/5, 2, 11/5)
+plot(data, stetja, xlab = "Velikosti n x n", ylim = c(1,9), ylab = "Število kompuptacij", main = "Število komputacij v mrežastih grafih", pch = 19, col = "red")
+points(data, stetja_improved, ylim = c(1,9),pch = 20, col = "blue", lty = 1)
+legend("topleft", pch = c(19, 20), col=c("red", "blue"), legend = c("naivni algoritem", "izboljsani algoritem")
+)
