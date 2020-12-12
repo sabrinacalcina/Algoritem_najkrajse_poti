@@ -95,8 +95,8 @@ Ljubljana, \letnica}
 \end{center}
 V prejktu smo se ukvarjali z  robustnimi problemi najkrajših poti. To so problemi, katerih cilj je najti pot, ki optimizira najslabše delovanje v množici negotovosti. Množica negotovosti je množica, ki vsebuje vse scenarije cen povezav, zgeneriranih ali zabeleženih na podlagi opažanj.
 Predpostavka tega problema je, da so množice negotovosti podane s strani strokovnjakov, ki povedo obliko in velikost le te.
-Množice negotovosti sva v projektu naključno generirala. Meriteve uporabljene v članku temeljijo na resničnih podatkih iz meritev prometa. Na podlagi teh podatkov, ki torej vsebujejo cene povezav nekega usmerjenega grafa, nato po premisleku izberemo primerno množico negotovosti, tako da primerjamo uspešnost dobljenih robustnih poti. 
-Na podlagi že znanih eksperimentov o učinkovitosti elipsoidne negotovosti, se nato osredotočimo na elipsoidne množice negotovosti in razvijemo nov algoritem s katerim nato iščemo najcenejšo povezavo med začetnim in končnim vozliščem.
+Množice negotovosti sva v projektu naključno generirala. Meriteve uporabljene v članku, na katerem sloni najino delo, temeljijo na resničnih podatkih iz meritev prometa. Na podlagi teh podatkov, ki torej vsebujejo cene povezav nekega usmerjenega grafa, nato po premisleku izberemo primerno množico negotovosti, tako da primerjamo uspešnost dobljenih robustnih poti. 
+Na podlagi že znanih eksperimentov o učinkovitosti elipsoidne negotovosti, se nato osredotočimo na elipsoidne množice negotovosti na katerih preiskušamo dva algoritma  za iskanje najcenejše povezave med začetnim in končnim vozliščem.
 \vfill
 
 
@@ -108,14 +108,14 @@ Kljub temu je večina robustnih problemov z najkrajšimi oz. najcenejšimi potmi
 
 Prvi članek, ki sledi drugačni perspektivi problema najkrajše poti, je izšel leta 2017. Gre za robustno optimizacijo, ki temelji na podatkih, kjer je gradnja negotove množice na podlagi surovih opazovanj del robustnega problema optimizacije. Na podlagi realnih opazovanj mesta Chicago so tako izračunali ustrezne robustne rešitve in izvedli poglobljeno analizo njihove uspešnosti. \newline
 
-V delu se osredotočimo na primer elipsoidne negotovosti in zagotavljanje hitrejšega algoritma. 
+V delu se osredotočimo na primer elipsoidne negotovosti za katero preiskušamo algoritme. 
 
 
 \section{Opis problema}
 \begin{itemize}
-\item{Za začetek imamo usmerjen graf $ G = (V, A)$, kjer je $v$ je množica vozljev, ter $A$ množica povezav. Za vsako povezavo je znana njena ceno, ki bo v našem primeru čas, potreben za prehod te povezave.}
+\item{Za začetek imamo usmerjen graf $ G = (V, A)$, kjer je $V$ je množica vozljev, ter $A$ množica povezav. Za vsako povezavo je znana njena ceno, ki bo v našem primeru čas, potreben za prehod te povezave.}
 \item{Cilj je najti pot v grafu, ki minimizira čas potreben za pot od začetnega do končnega oglišča. Za razliko od nam do zdaj znanih primerov, kjer so bile cene povezav podane eksaktno, so v našem primeru te podane z množico opazovanj teh povezav.}
-\item{Na teh množicah lahko sedaj poiščemo takšno pot, da bomo zminimizirali časovno najugodnejšo pot v primeru najslabšega scenarija. Npr. želimo poiskati najkrajšo pot v mestu od ene točke do druge, v primeru, maksimalne zasedenosti cest. Torej takrat,ko za vožnjo po njih porebujemo največ časa.}
+\item{Na teh množicah lahko sedaj poiščemo takšno pot, da bomo zminimizirali časovno najugodnejšo pot v primeru najslabšega scenarija. Npr. želimo poiskati najkrajšo pot v mestu od ene točke do druge, v primeru, maksimalne zasedenosti cest. Torej takrat, ko za vožnjo po njih porebujemo največ časa.}
 \item{Osredotočili se bomo na izvajanje algoritma za iskanje teh poti na elipsoidinih množicah negotovosti. Le te ponudijo najbolše razmerje med maksimalno in povprečno potjo, ter ponudijo zadovoljivo časovno zahtevnost algoritma.}
 \item{Prvotno sva tako izvedla Naivni algoritem, kasneje pa še Izboljšan algoritem.}
 \end{itemize}
@@ -130,9 +130,9 @@ Cilj je najti najkrajšo pot, ki minimizira celoten čas potovanja, podan kot vs
 \min \{c^t x : x \in \chi \},
 \end{equation*}
 
-kjer je $\chi \subseteq \{0,1\}^n$ in $n = |A|$.
+kjer je $\chi \subseteq \{0,1\}^n$ in $n = |A|$.\newline
 
-Predpostavimo tudi, da čas potovanja ni natančno znan, vendar je le ta podan kot množica $R$, kjer je $R = \{c^1, \dots, c^N \}$.
+Predpostavimo tudi, da čas potovanja ni natančno znan, vendar je le ta podan kot množica $R$, kjer je $R = \{c^1, \dots, c^N \}$.\newline
 
 Na podlagi teh podatkov generiramo množice negotovosti $U$, ki jih uporabljamo pri robustnih problemih najkrajših poti
 
@@ -143,7 +143,7 @@ Na podlagi teh podatkov generiramo množice negotovosti $U$, ki jih uporabljamo 
 
 \bigskip
 
-Naj bo sedaj $\hat{c} = \frac{1}{N} * \sum_{i \in [N]} c^i $, kjer je $[N] = \{1, \dots , N \}$. Elipsoidno negotovost definiramo kot
+Naj bo sedaj $\hat{c} = \frac{1}{N} * \sum_{i \in [N]} c^i $, kjer je $[N] = \{1, \dots , N \}$. Elipsoidno negotovost za parameter $\lambda$ definiramo kot
 \begin{equation*}
 U^E = \{c: (c - \hat{c})^t \Sigma ^{-1} (c - \hat{c}	\le \lambda \},
 \end{equation*}
@@ -151,7 +151,7 @@ U^E = \{c: (c - \hat{c})^t \Sigma ^{-1} (c - \hat{c}	\le \lambda \},
 kjer je $\Sigma = \frac{1}{N} \sum_{i \in [N]} (c^i -\hat{c}) (c^i -\hat{c})^t$.
 
 \bigskip
-Poleg elipsoidne negotovosti, poznamo tudi negotovost konveksnega trupa, intervalsko negotovost ter negotovost permotohula. 
+Poleg elipsoidne negotovosti, poznamo tudi negotovost konveksnega trupa, intervalsko negotovost ter negotovost permotohula in druge. 
 \pagebreak
 
 
@@ -165,19 +165,19 @@ Najprej sva generirala množice negotovosti velikosti $50$, torej za vsako povez
     \includegraphics[width=.5\textwidth]{drugi.png}\hfill
     \includegraphics[width=.5\textwidth]{tretji.png}\hfill
     \\[\smallskipamount]
-    \caption{Prikaz na mrežatih grafih velikosti $3 \times 3$}\label{fig:foobar}
+    \caption{Prikaz na mrežatih grafih velikosti $3 \times 3$ za tri opažanja}\label{fig:foobar}
 \end{figure}
 
   
-V najini nalogi sva obravnavala dva algoritma , ki iščeta najcenejšo robustno rešitev. Algoritma sva prizkušala na usmerjenih mrežasti grafih, v najinem primeru na grafih  z od $3\times3$, do $9\times9$ vozlišcih. Za vsakega od teh grafov sva iskala pot od začetnega vozlišča $(1, 1)$ do skrajno robnega vozlišča s koordinatami $(V, V)$. Za potrebo algoritmov, sva morala najti vse možne poti med tema dvema vozliščema, če je poti med vozliščema $p$, sva potem priredila vektorje iz množice $X = \{x^1, \dots, x^p \}$, vektorji so sestavljeni iz elementov $1$, v kolikor je povezava v poti uporabljena in $0$, če je izpuščena.\newline
+V najini nalogi sva obravnavala dva algoritma , ki iščeta najcenejšo robustno rešitev. Algoritma sva prizkušala na usmerjenih mrežasti grafih, v najinem primeru na grafih  z od $3\times3$, do $9\times9$ vozliščih. Za vsakega od teh grafov sva iskala pot od začetnega vozlišča $(1, 1)$ do skrajno robnega vozlišča s koordinatami $(V, V)$. Za potrebo algoritmov, sva morala najti vse možne poti med tema dvema vozliščema, če je poti med vozliščema $p$, sva potem priredila vektorje iz množice $X = \{x^1, \dots, x^p \}$, vektorji so sestavljeni iz elementov $1$, v kolikor je povezava v poti uporabljena in $0$, če je izpuščena. Velja omeniti še, da je število povezav mrežastih grafov in število poti med skrajnima vozliščema neposredno odvisno števila vozlišč grafa.\newline
 
-Pred pričetkom uporabe algoritmov sva pridobila še diagonalce matrike $\Sigma$, ki je naračunana iz najinih množic negotovosti.
+Pred pričetkom uporabe algoritmov sva pridobila še diagonalne elemente matrike $\Sigma$, ki je naračunana iz najinih množic negotovosti, torej predstavlja najino elipsoidono množico negotovosti.
 
 
 \section{Predstavitev optimizacijskega problema elipsoidnih množic negotovosti}
 Ker so elipsoidne množice negotovosti zelo stabilne in splošno zelo učinokovite, glede na ostale navedene negotovosti, smo se osredotočili na le te.
 
-Sprva opišimo učinkovit algoritem za reševanje problema robustne najkrajše poti, če je množica negotovosti podana kot osen paralelni elipsoid. Formulacija tega problema je
+Sprva opišimo učinkovit algoritem za reševanje problema robustne najkrajše poti, če je množica negotovosti podana kot osem paralelni elipsoid. Formulacija tega problema je
 
 \begin{equation*}
 \begin{aligned}
@@ -207,7 +207,7 @@ Problem lahko transformiramo na bikriterijski optimizacijski problem, podan kot
 \end{aligned}
 \end{equation*}
 
-Rešitev robustnega problema je v resnici tudi rešitev bikriterijskega optimizacijskega problema. Rešitev zgornjega problema pa označimo z $x^*$, če obstajata  $\alpha_{0}$ in $\alpha_{1}$, da je $0 \le \alpha_{0} < \alpha_{1} \le 1$. Tako za vse $\alpha \in [\alpha_{0},\alpha_{1}]$ je rešitev problema $x'$, za katero velja $(\alpha c + (1 - \alpha)d)^tx' < (\alpha c + (1- \alpha)d)^tx^{*}$.\newline
+Rešitev robustnega problema je v resnici tudi rešitev bikriterijskega optimizacijskega problema. Rešitvi zgornjega problema $x^*$ rečemo $učinkoviti\;ekstrem$, če obstajata  $\alpha_{0}$ in $\alpha_{1}$, velja $0 \le \alpha_{0} < \alpha_{1} \le 1$. Tako da za vse $\alpha \in [\alpha_{0},\alpha_{1}]$  ne obstaja neka druga rešitev $x'$, za katero bi veljalo $(\alpha c + (1 - \alpha)d)^tx' < (\alpha c + (1- \alpha)d)^tx^{*}$.\newline
  To pomeni, da je dovolj, če rešimo naslednji problem
 \begin{equation*}
 \begin{aligned}
@@ -216,24 +216,31 @@ Rešitev robustnega problema je v resnici tudi rešitev bikriterijskega optimiza
 \end{aligned}
 \end{equation*}
 
-Ker je rešitev lahko precej zahtevna, se omejimo na računanje podmnožic vseh učinkovitih ekstremnih rešitev problema. Med najdenimi rešitvami se nato izbere najboljša glede na robustno ciljno funkcijo.
+Ker je rešitev lahko precej zahtevna, se omejimo na računanje podmnožic vseh učinkovitih ekstremnih rešitev problema. Med najdenimi rešitvami se nato izbere najboljša glede na robustno ciljno funkcijo.\newline
 
 
-Oba algoritma iščeta učinkovite oz. učinkovito ekstremno rešitev s pomočjo računanja optimizacije leksikografskega problema:
+Oba algoritma iščeta učinkovite oz. učinkovito ekstremno rešitev s pomočjo računanja optimizacije leksikografskega problema
 \begin{equation*}
 \begin{aligned}
-\text{arglexmin}\quad &  (\hat{c}^t x , {d^tx}) in text{arglexmin}\\
+\text{arglexmin}\quad &  (\hat{c}^t x , {d^tx})\\
 \textrm{p.p.} \quad & x \in \chi.\\
 \end{aligned}
 \end{equation*}
 
+pri obeh je potrebno naračunati $x_l$ in $x_r$, kjer eden minimizira skalarni produkt po $\hat{c}$, drugi pa po $d$, eden torej poišče najcenejšo pot po povprečjih povezav, drugi pa po diagonalnih vrednostih matrike.\newline
+
+Naivni algoritem učinkovite ekstremne rešitve išče rekurzivno, tako da vedno znova poišče najcenejšo pot, jo nato primerja z prejšnjo najcenejšo potjo in v kolikor pride do izbolšave doda v množico ekstremnih rešitev novo vrednost.
+
+Izboljšani algoritem, pa se s pomočjo $x_l$ in $x_r$ omeji na neko območje iskanja rešitev, območje iskanja z vsako novo najdeno izboljšano rešitvijo zmanjša, ko je območja iskanja prazno ali zadosti majhno pa se algoritem ustavi ter vrne najugodnejšo pot.
+
+
 \section{Naivni algorotem in njegovi rezultati}
 
-Na začetku najinega dela, sva se lotila problema z reševanjem naivnega algoritma. Ko sva naivni algoritem pognala na mrežnih grafih, sva dobila najkrajšo pot v grafu glede na vse možne cene na povezavah. Poleg tega, naju je zanimala še časovna zahtevnost algoritma, ter koliko rekurzij je algoritem izvedel.
+Na začetku najinega dela, sva se reševanja problema lotila z uporabo naivnega algoritma. Ko sva naivni algoritem pognala na mrežnih grafih, je le ta vrnil množico učinkovitih ekstremnih rešitev, torej poti, katere dokaj dobro rešijo robustni problem najcenejših poti. Poleg tega, naju je zanimala še časovna zahtevnost algoritma in kolikokrat se je znotraj algoritma reševal problem najkrajših poti.
 Sam algoritem sva pognala na 10 različnih grafih z $n \times n$ vozlišči, ter izračunala povprečno vrednost poganjanja. Rezultate sva za $n = 3, 4, 5, 6, 7, 8, 9$ predstavila v spodnji tabeli.\newline
 
 
-Naj bo Graf n, graf z $n \times n$ vozlišči, čas je pa podan v sekundah.
+Naj bo Graf n, graf z $n \times n$ vozlišči, čas je podan v sekundah.
 
 \begin{center}
  \begin{tabular}{||c c c c c c c||} 
@@ -246,12 +253,12 @@ Graf 3 & Graf 4 & Graf 5 & Graf 6 & Graf 7 & Graf 8 & Graf 9 \\
 \end{tabular}
 \end{center}
 
-Komputacijski čas je vračal pričakovane vrednosti in sicer, za grafe z večjimi vozlišči je potreboval več časa. Za grafe z $9 \times 9$ vozlišči je potreboval nekaj več kot 40 sekund, medtem ko je manjše grafe algoritem izvedel zelo hitro. Komputacijski čas bova kasneje primerjala z komputacijskim časom izboljšanega algoritma.
+Komputacijski čas je vračal pričakovane vrednosti in sicer, za grafe z večjimi vozlišči je potreboval več časa. Za grafe z $9 \times 9$ vozlišči je potreboval nekaj več kot 40 sekund, medtem ko je manjše grafe algoritem predelal zelo hitro. Komputacijski čas bova kasneje primerjala z komputacijskim časom izboljšanega algoritma.\newline
 
-Poleg tega, sva beležila tudi koliko krat je za posamezno velikost grafa algoritem rekurzivno klical. Število rekurzivnih klicev je predstavljeno v spodnji tabeli.\newline
+Poleg tega, sva beležila tudi kolikokrat je za posamezno velikost grafa algoritem reševal problem najkrajših poti. Število reševanj je predstavljeno v spodnji tabeli.\newline
 
 \bigskip
-Naj bo NP n, število ki nam pove, koliko krat je algoritem pregledal celotno množico x, iz katere je potem našel najkrajšo možno pot glede na dan optimizacijski problem na grafu z $n \times n$ vozlišči.
+Naj bo NP n, število ki nam pove, koliko krat je algoritem pregledal celotno množico x, za katero je potem našel najkrajšo možno pot glede na dan optimizacijski problem za grafe z $n \times n$ vozlišči.
 \begin{center}
  \begin{tabular}{||c c c c c c c||} 
  \hline
@@ -264,13 +271,12 @@ Naj bo NP n, število ki nam pove, koliko krat je algoritem pregledal celotno mn
 \end{center}
 
 
-Za večje grafe je tako algoritem izvedel več rekurzivnih klicov, kar je podaljšalo komputacijski čas, zato je pri veljih grafih komputacijski čas bistveno daljši.
-Tudi rekurzivne klice bomo kasneje primerjali z izboljšanih algoritmom.
+Za večje grafe je algoritem večkrat reševal problem, kar je torej podaljšalo komputacijski čas. Tudi rekurzivne klice bomo kasneje primerjali z izboljšanim algoritmom.
 
 
 \section{Izboljšani algoritem in njegovi rezultati}
 
-Naj bo Graf n, graf z $n \times n$ vozlišči, čas je pa podan v sekundah.
+Naj bo Graf n, graf z $n \times n$ vozlišči, komputacijski čas je podan v sekundah.
 \begin{center}
  \begin{tabular}{||c c c c c c c||} 
  \hline
@@ -282,10 +288,12 @@ Graf 3 & Graf 4 & Graf 5 & Graf 6 & Graf 7 & Graf 8 & Graf 9 \\
 \end{tabular}
 \end{center}
 
+Tudi izboljšani algoritem pričakovano za večje grafe z več potmi v povprečju potreboval dalj časa.
+
 
 
 \bigskip
-Naj bo NP n, število ki nam pove, koliko krat je algoritem pregledal celotno množico x, iz katere je potem našel najkrajšo možno pot glede na dan optimizacijski problem na grafu z $n \times n$ vozlišči.
+Naj bo NP n enako kot zgoraj, le da tokrat torej uporabljamo izboljšani algoritem.
 \begin{center}
  \begin{tabular}{||c c c c c c c||} 
  \hline
@@ -297,7 +305,9 @@ Naj bo NP n, število ki nam pove, koliko krat je algoritem pregledal celotno mn
 \end{tabular}
 \end{center}
 
-Primerjava komputacijskih časov med naivnim in izboljšanim algoritmom.
+Izboljšani algoritem, zanimivo problema najkrajših poti ne računa nujno večkrat za grafe z več vozlišči, kar pomeni, da kot kaže, s svojimi pogoji že v prvih korakih določi dokaj dober približek najugodnejše poti za robusten optimizacijski problem.  
+
+\section{Primerjava komputacijskih časov med naivnim in izboljšanim algoritmom}
 \begin{figure}[H]
   \centering
   \includegraphics[width=90mm]{rplot.png}
