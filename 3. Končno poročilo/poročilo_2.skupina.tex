@@ -95,7 +95,7 @@ Ljubljana, \letnica}
 \end{center}
 V prejktu smo se ukvarjali z  robustnimi problemi najkrajših poti. To so problemi, katerih cilj je najti pot, ki optimizira najslabše delovanje v množici negotovosti. Množica negotovosti je množica, ki vsebuje vse scenarije cen povezav, zgeneriranih ali zabeleženih na podlagi opažanj.
 Predpostavka tega problema je, da so množice negotovosti podane s strani strokovnjakov, ki povedo obliko in velikost le te.
-Množice negotovosti sva v projektu naključno generirala. Meriteve uporabljene v članku, na katerem sloni najino delo, temeljijo na resničnih podatkih iz meritev prometa. Na podlagi teh podatkov, ki torej vsebujejo cene povezav nekega usmerjenega grafa, nato po premisleku izberemo primerno množico negotovosti, tako da primerjamo uspešnost dobljenih robustnih poti. 
+Množice negotovosti smo v projektu naključno generirali. Meriteve uporabljene v članku, na katerem sloni najino delo, temeljijo na resničnih podatkih iz meritev prometa. Na podlagi teh podatkov, ki torej vsebujejo cene povezav nekega usmerjenega grafa, nato po premisleku izberemo primerno množico negotovosti, tako da primerjamo uspešnost dobljenih robustnih poti. 
 Na podlagi že znanih eksperimentov o učinkovitosti elipsoidne negotovosti, se nato osredotočimo na elipsoidne množice negotovosti na katerih preiskušamo dva algoritma  za iskanje najcenejše povezave med začetnim in končnim vozliščem.
 \vfill
 
@@ -113,17 +113,17 @@ V delu se osredotočimo na primer elipsoidne negotovosti za katero preiskušamo 
 
 \section{Opis problema}
 \begin{itemize}
-\item{Za začetek imamo usmerjen graf $ G = (V, A)$, kjer je $V$ je množica vozljev, ter $A$ množica povezav. Za vsako povezavo je znana njena ceno, ki bo v našem primeru čas, potreben za prehod te povezave.}
-\item{Cilj je najti pot v grafu, ki minimizira čas potreben za pot od začetnega do končnega oglišča. Za razliko od nam do zdaj znanih primerov, kjer so bile cene povezav podane eksaktno, so v našem primeru te podane z množico opazovanj teh povezav.}
+\item{Za začetek imamo usmerjen graf $ G = (V, A)$, kjer je $V$ je množica vozljev, ter $A$ množica povezav. Za vsako povezavo je znana njena cena, ki bo v našem primeru čas, potreben za prehod te povezave.}
+\item{Cilj je najti pot v grafu, ki minimizira čas potreben za pot od začetnega do končnega vozlišča. Za razliko od nam do zdaj znanih primerov, kjer so bile cene povezav podane eksaktno, so v našem primeru te podane z množico opazovanj teh povezav.}
 \item{Na teh množicah lahko sedaj poiščemo takšno pot, da bomo zminimizirali časovno najugodnejšo pot v primeru najslabšega scenarija. Npr. želimo poiskati najkrajšo pot v mestu od ene točke do druge, v primeru, maksimalne zasedenosti cest. Torej takrat, ko za vožnjo po njih porebujemo največ časa.}
 \item{Osredotočili se bomo na izvajanje algoritma za iskanje teh poti na elipsoidinih množicah negotovosti. Le te ponudijo najbolše razmerje med maksimalno in povprečno potjo, ter ponudijo zadovoljivo časovno zahtevnost algoritma.}
-\item{Prvotno sva tako izvedla Naivni algoritem, kasneje pa še Izboljšan algoritem.}
+\item{Prvotno smo tako izvedli Naivni algoritem, kasneje pa še Izboljšanega.}
 \end{itemize}
 
 
 \section{Množice negotovosti najkrajših poti}
 
-Naj bo $G = (V, A)$ graf, kjer z $V$ označimo vozlišča grafa in z $A$ poti. Za vsako pot $e\in A$ poznamo čas potovanja $c_{e} \ge 0$. Začetno oglišče označimo s $s$, končno pa s $t$.
+Naj bo $G = (V, A)$ graf, kjer z $V$ označimo vozlišča grafa in z $A$ poti. Za vsako pot $e\in A$ poznamo čas potovanja $c_{e} \ge 0$. Začetno vozlišče označimo s $s$, končno pa s $t$.
 Cilj je najti najkrajšo pot, ki minimizira celoten čas potovanja, podan kot vsoto vseh časov na določeni povezavi, ki je del poti. Formalno to zapišemo kot
 
 \begin{equation*}
@@ -157,7 +157,7 @@ Poleg elipsoidne negotovosti, poznamo tudi negotovost konveksnega trupa, interva
 
 \section{Priprava}
 
-Najprej sva generirala množice negotovosti velikosti $50$, torej za vsako povezavo v grafu je bilo danih $50$ različnih cen oziroma opažanj. Cene so porazdeljene enakomerno, vrednosti so iz množice od $\{1, \dots , 100\} $. Vsaki povezavi sva nato naračunala povprečno ceno, povprečja vseh teh povezav so zbrana v vektorju $\hat{c}$.\newline
+Najprej smo generirali množice negotovosti velikosti $50$, torej za vsako povezavo v grafu je bilo danih $50$ različnih cen oziroma opažanj. Cene so porazdeljene enakomerno, vrednosti so iz množice od $\{1, \dots , 100\} $. Vsaki povezavi smo nato naračunali povprečno ceno, povprečja vseh teh povezav so zbrana v vektorju $\hat{c}$.\newline
 
 
 \begin{figure}[H]
@@ -169,9 +169,9 @@ Najprej sva generirala množice negotovosti velikosti $50$, torej za vsako povez
 \end{figure}
 
   
-V najini nalogi sva obravnavala dva algoritma , ki iščeta najcenejšo robustno rešitev. Algoritma sva prizkušala na usmerjenih mrežasti grafih, v najinem primeru na grafih  z od $3\times3$, do $9\times9$ vozliščih. Za vsakega od teh grafov sva iskala pot od začetnega vozlišča $(1, 1)$ do skrajno robnega vozlišča s koordinatami $(V, V)$. Za potrebo algoritmov, sva morala najti vse možne poti med tema dvema vozliščema, če je poti med vozliščema $p$, sva potem priredila vektorje iz množice $X = \{x^1, \dots, x^p \}$, vektorji so sestavljeni iz elementov $1$, v kolikor je povezava v poti uporabljena in $0$, če je izpuščena. Velja omeniti še, da je število povezav mrežastih grafov in število poti med skrajnima vozliščema neposredno odvisno števila vozlišč grafa.\newline
+V nalogi smo obravnavali dva algoritma , ki iščeta najcenejšo robustno rešitev. Algoritma smo prizkušali na usmerjenih mrežasti grafih, v našem primeru na grafih  z od $3\times3$, do $9\times9$ vozliščih. Za vsakega od teh grafov smo iskali pot od začetnega vozlišča $(1, 1)$ do skrajno robnega vozlišča s koordinatami $(V, V)$. Za potrebo algoritmov, smo morali najti vse možne poti med tema dvema vozliščema, če je poti med vozliščema $p$, smo potem priredili vektorje iz množice $X = \{x^1, \dots, x^p \}$, vektorji so sestavljeni iz elementov $1$, v kolikor je povezava v poti uporabljena in $0$, če je izpuščena. Velja omeniti še, da je število povezav mrežastih grafov in število poti med skrajnima vozliščema neposredno odvisno števila vozlišč grafa.\newline
 
-Pred pričetkom uporabe algoritmov sva pridobila še diagonalne elemente matrike $\Sigma$, ki je naračunana iz najinih množic negotovosti, torej predstavlja najino elipsoidono množico negotovosti.
+Pred pričetkom uporabe algoritmov smo pridobili še diagonalne elemente matrike $\Sigma$, ki je naračunana iz množic negotovosti, torej predstavlja elipsoidono množico negotovosti.
 
 
 \section{Predstavitev optimizacijskega problema elipsoidnih množic negotovosti}
@@ -236,8 +236,8 @@ Izboljšani algoritem, pa se s pomočjo $x_l$ in $x_r$ omeji na neko območje is
 
 \section{Naivni algorotem in njegovi rezultati}
 
-Na začetku najinega dela, sva se reševanja problema lotila z uporabo naivnega algoritma. Ko sva naivni algoritem pognala na mrežnih grafih, je le ta vrnil množico učinkovitih ekstremnih rešitev, torej poti, katere dokaj dobro rešijo robustni problem najcenejših poti. Poleg tega, naju je zanimala še časovna zahtevnost algoritma in kolikokrat se je znotraj algoritma reševal problem najkrajših poti.
-Za vsak mrežast graf z $n \times n$ vozlišči, sva naredila 30 ponovitev, ter izračunala povprečno vrednost poganjanja. Rezultate sva za $n = 3, 4, 5, 6, 7, 8, 9$ predstavila v spodnji tabeli.\newline
+Na začetku dela, smo se reševanja problema lotili z uporabo naivnega algoritma. Ko smo naivni algoritem pognali na mrežnih grafih, je le ta vrnil množico učinkovitih ekstremnih rešitev, torej poti, katere dokaj dobro rešijo robustni problem najcenejših poti. Poleg tega, naju je zanimala še časovna zahtevnost algoritma in kolikokrat se je znotraj algoritma reševal problem najkrajših poti.
+Za vsak mrežast graf z $n \times n$ vozlišči, smo naredili 30 ponovitev, ter izračunali povprečno vrednost poganjanja. Rezultate smo za $n = 3, 4, 5, 6, 7, 8, 9$ predstavili v spodnji tabeli.\newline
 
 
 Naj bo Graf n, graf z $n \times n$ vozlišči, čas je podan v sekundah.
@@ -253,9 +253,9 @@ Graf 3 & Graf 4 & Graf 5 & Graf 6 & Graf 7 & Graf 8 & Graf 9 \\
 \end{tabular}
 \end{center}
 
-Komputacijski čas je vračal pričakovane vrednosti in sicer, za grafe z večjimi vozlišči je potreboval več časa. Za grafe z $9 \times 9$ vozlišči je potreboval nekaj več kot 40 sekund, medtem ko je manjše grafe algoritem predelal zelo hitro. Komputacijski čas bova kasneje primerjala z komputacijskim časom izboljšanega algoritma.\newline
+Komputacijski čas je vračal pričakovane vrednosti in sicer, za grafe z večjimi vozlišči je potreboval več časa. Za grafe z $9 \times 9$ vozlišči je potreboval nekaj več kot 40 sekund, medtem ko je manjše grafe algoritem predelal zelo hitro. Komputacijski čas bomo kasneje primerjali z komputacijskim časom izboljšanega algoritma.\newline
 
-Poleg tega, sva beležila tudi kolikokrat je za posamezno velikost grafa algoritem reševal problem najkrajših poti. Število reševanj je predstavljeno v spodnji tabeli.\newline
+Poleg tega, smo beležili tudi kolikokrat je za posamezno velikost grafa algoritem reševal problem najkrajših poti. Število reševanj je predstavljeno v spodnji tabeli.\newline
 
 \bigskip
 Naj bo NP n, število ki nam pove, koliko krat je algoritem pregledal celotno množico x, za katero je potem našel najkrajšo možno pot glede na dan optimizacijski problem za grafe z $n \times n$ vozlišči.
@@ -336,8 +336,16 @@ Komputacijske čase obeh algoritmov smo predstavili na spodnjem grafu.
 
 Razvidno je, da izboljšani algoritem poti išče mnogo hitreje kot naivni. V iskanju robustnih rešitev, je časovno najzahtevnejše iskanje najkrajših poti. Izboljšani algoritem problem rešuje manjkrat, tako je pri istem številu vozlišč časovna zahtevnost nižja.
 
+\newpage
 
 
+\begin{thebibliography}{9}
+
+    \bibitem{RNP} 
+    André Chassein, Trivikram Dokka, Marc Goerigk
+    \\\texttt{Algorithms and uncertainty sets for data-driven robust shortest path problems}
+
+\end{thebibliography}
 
 
 
