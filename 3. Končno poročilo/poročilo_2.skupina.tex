@@ -157,7 +157,7 @@ Poleg elipsoidne negotovosti, poznamo tudi negotovost konveksnega trupa, interva
 
 \section{Priprava}
 
-Najprej sva generirala množice negotovosti velikosti $50$, torej za vsako povezavo v grafu je bilo danih $50$ različnih cen oziroma opažanj. Vsaki povezavi sva nato naračunala povprečno ceno, povprečja vseh teh povezav so zbrana v vektorju $\hat{c}$.\newline
+Najprej sva generirala množice negotovosti velikosti $50$, torej za vsako povezavo v grafu je bilo danih $50$ različnih cen oziroma opažanj. Cene so porazdeljene enakomerno, vrednosti so iz množice od $\{1, \dots , 100\} $. Vsaki povezavi sva nato naračunala povprečno ceno, povprečja vseh teh povezav so zbrana v vektorju $\hat{c}$.\newline
 
 
 \begin{figure}[H]
@@ -237,7 +237,7 @@ Izboljšani algoritem, pa se s pomočjo $x_l$ in $x_r$ omeji na neko območje is
 \section{Naivni algorotem in njegovi rezultati}
 
 Na začetku najinega dela, sva se reševanja problema lotila z uporabo naivnega algoritma. Ko sva naivni algoritem pognala na mrežnih grafih, je le ta vrnil množico učinkovitih ekstremnih rešitev, torej poti, katere dokaj dobro rešijo robustni problem najcenejših poti. Poleg tega, naju je zanimala še časovna zahtevnost algoritma in kolikokrat se je znotraj algoritma reševal problem najkrajših poti.
-Sam algoritem sva pognala na 10 različnih grafih z $n \times n$ vozlišči, ter izračunala povprečno vrednost poganjanja. Rezultate sva za $n = 3, 4, 5, 6, 7, 8, 9$ predstavila v spodnji tabeli.\newline
+Za vsak mrežast graf z $n \times n$ vozlišči, sva naredila 30 ponovitev, ter izračunala povprečno vrednost poganjanja. Rezultate sva za $n = 3, 4, 5, 6, 7, 8, 9$ predstavila v spodnji tabeli.\newline
 
 
 Naj bo Graf n, graf z $n \times n$ vozlišči, čas je podan v sekundah.
@@ -248,7 +248,7 @@ Naj bo Graf n, graf z $n \times n$ vozlišči, čas je podan v sekundah.
 Graf 3 & Graf 4 & Graf 5 & Graf 6 & Graf 7 & Graf 8 & Graf 9 \\ 
  \hline
 \hline
- 0.00262 & 0.00678 & 0.04248& 0.28319 & 1.309803&7.54676 & 40.49303\\ 
+0.00078 & 0.00533 & 0.02949 & 0.24377 & 1.17852 & 7.36974 & 40.05113 \\
  \hline
 \end{tabular}
 \end{center}
@@ -265,7 +265,7 @@ Naj bo NP n, število ki nam pove, koliko krat je algoritem pregledal celotno mn
  NP 3 &  NP 4 &  NP 5 &  NP 6 &  NP 7 &  NP 8 &  NP 9 \\ 
  \hline
 \hline
-2.4 & 3.2 & 4.6 & 5.8 & 6.8 & 7.8 &  8.2\\ 
+2.07 & 2.47 & 4.07 & 5.73 & 6.53 & 8.2 & 8.93\\
  \hline
 \end{tabular}
 \end{center}
@@ -276,6 +276,9 @@ Za večje grafe je algoritem večkrat reševal problem, kar je torej podaljšalo
 
 \section{Izboljšani algoritem in njegovi rezultati}
 
+Na enakih grafih kot pri naivnem algoritmu, torej mrežastih, smo poskus ponovili na izboljšanem algoritmu. Naredili smo 30 ponovitev, ter izračunali povrpečno vrednost poganjanja. Rezultate za $ n = 3,4,5,6,7,8,9$ smo predstavili v spodnji tabeli.
+
+
 Naj bo Graf n, graf z $n \times n$ vozlišči, komputacijski čas je podan v sekundah.
 \begin{center}
  \begin{tabular}{||c c c c c c c||} 
@@ -283,41 +286,55 @@ Naj bo Graf n, graf z $n \times n$ vozlišči, komputacijski čas je podan v sek
 Graf 3 & Graf 4 & Graf 5 & Graf 6 & Graf 7 & Graf 8 & Graf 9 \\ 
  \hline
 \hline
-0.08271 & 0.22994 & 0.17297 & 0.56878 & 1.90194 & 32.74674 &  57.52192\\ 
+0.11760 & 0.01872 & 0.02816 & 0.16980 & 0.64850 & 2.38989 & 17.06119\\
  \hline
 \end{tabular}
 \end{center}
 
-Tudi izboljšani algoritem pričakovano za večje grafe z več potmi v povprečju potreboval dalj časa.
+Tudi izboljšani algoritem je, pričakovano za večje grafe z več potmi, v povprečju potreboval dalj časa.\newline
 
 
+Poleg tega, smo ponovno beležili kolikokrat je za posamezno velikost grafa algoritem reševal problem najkrajših poti. Število reševanj je predstavljeno v spodnji tabeli.
 
-\bigskip
-Naj bo NP n enako kot zgoraj, le da tokrat torej uporabljamo izboljšani algoritem.
+
+Naj bo NP n enako kot zgoraj, le da tokrat torej uporabljamo izboljšani algoritem. 
 \begin{center}
  \begin{tabular}{||c c c c c c c||} 
  \hline
  NP 3 &  NP 4 &  NP 5 &  NP 6 &  NP 7 &  NP 8 &  NP 9 \\ 
  \hline
 \hline
-1.4& 1.8& 2.0& 2.0& 2.8& 2.0& 2.2\\ 
+3.87 & 4.07 & 3.20 & 4.00 & 4.27 & 3.47 & 4.6 \\ 
  \hline
 \end{tabular}
 \end{center}
 
-Izboljšani algoritem, zanimivo problema najkrajših poti ne računa nujno večkrat za grafe z več vozlišči, kar pomeni, da kot kaže, s svojimi pogoji že v prvih korakih določi dokaj dober približek najugodnejše poti za robusten optimizacijski problem.  
+Izboljšani algoritem, zanimivo problema najkrajših poti ne računa nujno večkrat za grafe z več vozlišči, kar pomeni, da kot kaže, s svojimi pogoji že v prvih korakih določi dokaj dober približek najugodnejše poti za robusten optimizacijski problem. 
 
-\section{Primerjava komputacijskih časov med naivnim in izboljšanim algoritmom}
+\section{Primerjava algoritmov}
+
+Opažanja smo predstavili na spodnjem grafu. 
+
 \begin{figure}[H]
   \centering
-  \includegraphics[width=90mm]{rplot.png}
+  \includegraphics[width=90mm]{Rplot2.png}
+  \caption{Število komutacijskih časov v mrežastih grafih}
+  \label{fig: Graf 1}
+\end{figure}
+
+Razvidno je, da števila komputacij pri naivnem algoritmu naraščajo bistveno hitreje kot kot pri izboljšanem, kjer povečave skoraj ni bilo. Število komputacij pri 30 ponovitvah $9 \dots 9$ grafov, je tako število komputacij v povprečju nekaj več kot 4, pri naivnem pa skoraj 9.\newline
+
+Komputacijske čase obeh algoritmov smo predstavili na spodnjem grafu.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=90mm]{Rplot3.png}
   \caption{Število komutacijskih časov v mrežastih grafih}
   \label{fig: Graf 1}
 \end{figure}
 
 
-
-
+Razvidno je, da izboljšani algoritem poti išče mnogo hitreje kot naivni. V iskanju robustnih rešitev, je časovno najzahtevnejše iskanje najkrajših poti. Izboljšani algoritem problem rešuje manjkrat, tako je pri istem številu vozlišč časovna zahtevnost nižja.
 
 
 
